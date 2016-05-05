@@ -34,7 +34,7 @@ namespace Etherpad
 
     public class EtherpadLiteDotNet
     {
-        private const string APIVersion = "1";
+        private const string APIVersion = "1.2.13";
         private string ApiKey { get; set; }
         private UriBuilder BaseURI { get; set; }
 
@@ -85,8 +85,8 @@ namespace Etherpad
                     throw new ArgumentException("The API key supplied is invalid.");
                 case EtherpadReturnCodeEnum.InvalidFunction:
                     throw new MissingMethodException("The function name passed is invalid.", responseObject.Message);
-                case EtherpadReturnCodeEnum.InvalidParameters:
-                    throw new ArgumentException("An invalid parameter has been passed to the function.", responseObject.Message);
+                //case EtherpadReturnCodeEnum.InvalidParameters:
+                //    throw new ArgumentException("An invalid parameter has been passed to the function.", responseObject.Message);
             }
             #endregion
 
@@ -187,7 +187,7 @@ namespace Etherpad
         public EtherpadResponseSessionID CreateSession(string groupID, string authorID, string validUntil)
         {
             return (EtherpadResponseSessionID)CallAPI("createSession",
-                new string[,] { { "groupID", groupID }, { "authorID ", authorID }, { "validUntil", validUntil } },
+                new string[,] { { "groupID", groupID }, { "authorID", authorID }, { "validUntil", validUntil } },
                 typeof(EtherpadResponseSessionID));
         }
 
@@ -228,6 +228,13 @@ namespace Etherpad
                 typeof(EtherpadResponsePadText));
         }
 
+        public EtherpadResponsePadHtml GetHtml(string padID)
+        {
+            return (EtherpadResponsePadHtml)CallAPI("getHTML",
+                new string[,] { { "padID", padID } },
+                typeof(EtherpadResponsePadHtml));
+        }
+
         public EtherpadResponsePadText GetText(string padID, int rev)
         {
             return (EtherpadResponsePadText)CallAPI("getText",
@@ -241,6 +248,12 @@ namespace Etherpad
                 new string[,] { { "padID", padID }, { "text", text } });
         }
 
+        public EtherpadResponse SetHtml(string padID, string html)
+        {
+            return CallAPI("setHTML",
+                new string[,] { { "padID", padID }, { "html", html } });
+        }
+        
         public EtherpadResponse CreatePad(string padID)
         {
             return CallAPI("createPad", 
@@ -297,6 +310,11 @@ namespace Etherpad
             return (EtherpadResponsePadPasswordProtection)CallAPI("isPasswordProtected",
                    new string[,] { { "padID", padID } },
                    typeof(EtherpadResponsePadPasswordProtection));
+        }
+
+        public EtherpadResponse CheckToken()
+        {
+            return CallAPI("checkToken", null, typeof(EtherpadResponse));
         }
 
         #endregion Pad
@@ -359,7 +377,7 @@ namespace Etherpad
 
     public class EtherpadResponseSessionInfos : EtherpadResponse
     {
-        public IEnumerable<DataSessionInfo> Data { get; set; }
+        public IDictionary<string, DataSessionInfo> Data { get; set; }
     }
 
     public class DataSessionInfo
@@ -379,6 +397,16 @@ namespace Etherpad
         public string Text { get; set; }
     }
 
+    public class EtherpadResponsePadHtml : EtherpadResponse
+    {
+        public DataPadHtml Data { get; set; }
+    }
+
+    public class DataPadHtml
+    {
+        public string HTML { get; set; }
+    }
+    
     public class EtherpadResponsePadRevisions : EtherpadResponse
     {
         public DataPadRevisions Data { get; set; }
