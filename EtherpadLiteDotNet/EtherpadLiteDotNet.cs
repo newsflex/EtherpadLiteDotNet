@@ -279,6 +279,12 @@ namespace Etherpad
                 new string[,] { { "padID", padID } });
         }
 
+        public EtherpadResponsePadUsersCount PadUsersCount(string padID)
+        {
+            return (EtherpadResponsePadUsersCount) CallAPI("padUsersCount",
+                new string[,] { { "padID", padID } }, typeof(EtherpadResponsePadUsersCount));
+        }
+
         public EtherpadResponsePadReadOnlyID GetReadOnlyID(string padID)
         {
             return (EtherpadResponsePadReadOnlyID)CallAPI("getReadOnlyID",
@@ -406,6 +412,11 @@ namespace Etherpad
     {
         public string HTML { get; set; }
     }
+
+    public class DataUsersCount
+    {
+        public int PadUsersCount { get; set; }
+    }
     
     public class EtherpadResponsePadRevisions : EtherpadResponse
     {
@@ -430,6 +441,11 @@ namespace Etherpad
     public class EtherpadResponsePadPublicStatus : EtherpadResponse
     {
         public DataPadPublicStatus Data { get; set; }
+    }
+
+    public class EtherpadResponsePadUsersCount : EtherpadResponse
+    {
+        public DataUsersCount Data { get; set; }
     }
 
     public class DataPadPublicStatus
