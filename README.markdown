@@ -1,3 +1,5 @@
+## DON'T USE THIS REPO ANYMORE. The Project was imported into the NewsPlex.sln Visual Studio Repo as part of trunk! -Joe 8/25/16
+
 .Net Library For Etherpad Lite API
 =========================
 * It implements the Etherpad Lite API, [more infomation on the API can be found on the Etherpad Lite wiki][1].
